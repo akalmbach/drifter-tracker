@@ -55,17 +55,6 @@ function init() {
 		]*/
     });
 	
-	drawControls = {
-		drag: new OpenLayers.Control.DragFeature(vectorLayer, {
-		  autoActivate:true,  
-		  onComplete: dragWaypoint /*function(point) {
-		    console.log(point.geometry.id);
-		    var coord = transform(point.geometry);
-	      console.log(coord.x + ',' + coord.y);
-		  }*/ 
-		})
-	};
-	
 	for(var key in drawControls) {
 		map.addControl(drawControls[key]);
 	}
@@ -113,7 +102,6 @@ function init() {
     map.addControls([cacheRead1, cacheRead2, cacheWrite, layerSwitcher]);
 
     
-    
     // add UI and behavior
     var status = document.getElementById("status"),
         hits = document.getElementById("hits"),
@@ -130,9 +118,11 @@ function init() {
     //write.onclick = toggleWrite;
     
     $('#writeSwitch').on('switch-change', function (e, data) {
-        //var $el = $(data.el), value = data.value;
-        //console.log(e, $el, value);
         toggleWrite();
+    });
+    
+    $('#connectRos').on('switch-change', function (e, data) {
+        toggleROS();
     });
     
     document.getElementById("clear").onclick = clearCache;
@@ -189,6 +179,12 @@ function init() {
         } else {
             setType();
         }
+    }
+    
+    // turn the ros connection on and off
+    function toggleROS() {
+      console.log("toggle ros");
+      toggleConnection();
     }
     
     // turn the cacheWrite control on and off

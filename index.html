@@ -13,16 +13,26 @@
 		    <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/bootstrap-switch.min.js"></script>
+        <script type="text/javascript" src="js/eventemitter2.min.js"></script>
+        <script type="text/javascript" src="js/roslib.min.js"></script>
         <script src="openlayers/OpenLayers.debug.js"></script>
         <script src="js/geo.js"></script>
         <script src="js/main.js"></script>
         <script src="js/ui.js"></script>
+        <script src="js/sub.js"></script>
     </head>
     <body onload="init()" style="margin:0">
         <div class="navbar navbar-inverse" style="border-radius:0;">
           <a class="navbar-brand" href="#" style="color:#eee">Drifter Tracker</a>
           
+          
           <div class="pull-right">
+              <p class="navbar-text" style="margin-top:13px;">
+                Connection
+                <span id="connectRos" class="make-switch switch-small" style="border:1px solid #ccc">
+                    <input id="connect" type="checkbox" />
+                </span>
+              </p>
               <p class="navbar-text" style="margin-top:13px;">
                 Tile Cache
                 <span id="writeSwitch" class="make-switch switch-small" style="border:1px solid #ccc">
