@@ -1,0 +1,26 @@
+.navbar-text {
+  color:#eee !important;
+  font-size:15px;
+  padding-left:0;
+  /*padding-right:5px;*/
+}
+
+div.olControlMousePosition {
+	color: white;
+	background-color: rgba(0,0,0,0.5);
+	font-size:14px;
+}
+
+.wayptBox {
+  float:left;
+  padding:5px;
+}
+
+.added {
+  font-size:18px;
+}
+
+.popover {
+  max-width:450px;
+  width:auto;
+}
