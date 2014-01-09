@@ -56,20 +56,6 @@ function init() {
     });
 	
 	drawControls = {
-		point: new OpenLayers.Control.DrawFeature(vectorLayer,
-			OpenLayers.Handler.Point, {autoActivate:true}),
-		/*line: new OpenLayers.Control.DrawFeature(vectorLayer,
-			OpenLayers.Handler.Path),
-		polygon: new OpenLayers.Control.DrawFeature(vectorLayer,
-			OpenLayers.Handler.Polygon),
-		box: new OpenLayers.Control.DrawFeature(vectorLayer,
-			OpenLayers.Handler.RegularPolygon, {
-				handlerOptions: {
-					sides: 4,
-					irregular: true
-				}
-			}
-		)*/
 		drag: new OpenLayers.Control.DragFeature(vectorLayer, {
 		  autoActivate:true,  
 		  onComplete: dragWaypoint /*function(point) {
@@ -79,17 +65,6 @@ function init() {
 		  }*/ 
 		})
 	};
-	
-	
-	drawControls['point'].featureAdded = addWaypoint;
-	/*function(point) {
-	  console.log(point.geometry);
-	  var coord = transform(point.geometry);
-	  console.log(coord.x + ',' + coord.y);
-	}*/
-	
-  //manualpt = new OpenLayers.Feature.Vector(backTransform(new OpenLayers.Geometry.Point(-59.640999733798246,13.19158361693973)));
-  //vectorLayer.addFeatures([manualpt]);
 	
 	for(var key in drawControls) {
 		map.addControl(drawControls[key]);
