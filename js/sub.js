@@ -9,8 +9,12 @@ function Tracker(c) {
 var ros = new ROSLIB.Ros();
 var addr = "localhost:9090";
 var connected = false;
-var tracker = new Tracker('red');
-var msgps = 10;
+trackers = {
+  ramius: new Tracker('red'),
+  drifter: new Tracker('gold'),
+  laptop: new Tracker('magenta')
+}
+var msgps = 0.5;
 
 
 function plotGPS(tracker, msg) {
@@ -26,13 +30,13 @@ function plotGPS(tracker, msg) {
   var time = msg.header.stamp.secs + msg.header.stamp.nsecs/1e9;
   var str = time.toString() + ' @ (' + lat.toString() + ',' + lon.toString() + ')';
 
-  console.log('recv gps ' + tracker.color + ' (' + lat.toString() + ',' + lon.toString() + ') @ ' + time.toString());
+  console.log('recv gps ' + tracker.color + ' (' + lon.toString() + ',' + lat.toString() + ') @ ' + time.toString());
 
   var maxNumMarkers = parseInt($('#path_length').val());
   if (maxNumMarkers > 0) {
     while (tracker.markers.length >= maxNumMarkers) {
-      var removedMarker = tracker.markers.shift();
-      removedMarker.setMap(null);
+      var removedFeature = tracker.markers.shift();
+      removedFeature.layer.destroyFeatures([removedFeature]);
     }
   }
   
@@ -43,18 +47,28 @@ function plotGPS(tracker, msg) {
     OpenLayers.Feature.Vector.style["default"]
   ); 
   vectorLayer.addFeatures([manualpt]);
+  tracker.markers.push(manualpt);
   
 }
 
-function callbackGPS(msg) {
-  //console.log(msg);
-  plotGPS(tracker, msg);
+function callbackRamiusGPS(msg) {
+  plotGPS(trackers['ramius'], msg);
+}
+
+function callbackDrifterGPS(msg) {
+  plotGPS(trackers['drifter'], msg);
+}
+
+function callbackLaptopGPS(msg) {
+  plotGPS(trackers['laptop'], msg);
 }
 
 function toggleConnection() {  
   if (connected) { // Disconnect from ROSBridge server
-    if (tracker.listenerGPS != null) {
-      tracker.listenerGPS.unsubscribe();
+    for (var tracker in trackers) {
+      if (trackers[tracker].listenerGPS != null) {
+        trackers[tracker].listenerGPS.unsubscribe();
+      }
     }
     ros.close();
     console.log("disconnected from ws://" + addr + "/*");
@@ -63,18 +77,27 @@ function toggleConnection() {
   else { // Connect to ROSBridge server
     ros.connect('ws://' + addr);
 
-    var topic = $('#ramius_gps_topic').val();
-    if (topic.length <= 0) {
-      topic = "/ramiusgpsbox/gps/fix";
+    for (var tracker in trackers) {
+      var topic = $('#' + tracker + '_gps_topic').val();
+      if (topic.length <= 0) {
+        topic = tracker + "/gps/fix";
+      }
+          
+      trackers[tracker].listenerGPS = new ROSLIB.Topic({
+          ros : ros,
+          name : topic,
+          messageType : 'sensor_msgs/NavSatFix'
+      });
+      if (tracker == 'ramius') {
+        trackers[tracker].listenerGPS.subscribe(callbackRamiusGPS);
+      }
+      if (tracker == 'drifter') {
+        trackers[tracker].listenerGPS.subscribe(callbackDrifterGPS);
+      }
+      if (tracker == 'laptop') {
+        trackers[tracker].listenerGPS.subscribe(callbackLaptopGPS);
+      }
     }
-        
-    tracker.listenerGPS = new ROSLIB.Topic({
-        ros : ros,
-        name : topic,
-        messageType : 'sensor_msgs/NavSatFix'
-    });
-    tracker.listenerGPS.subscribe(callbackGPS);
-    
     console.log("connected to ws://" + addr + topic);
     connected = true;
   }
