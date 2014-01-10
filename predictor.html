@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
-        <title>Drifter GPS Tracker</title>
+        <title>Drifter GPS Tracker/Predictor</title>
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="css/bootstrap-switch.css" />
         <link rel="stylesheet" type="text/css" href="openlayers/theme/default/style.css" />
@@ -19,11 +19,11 @@
         <script src="js/geo.js"></script>
         <script src="js/main.js"></script>
         <script src="js/ui.js"></script>
-        <script src="js/sub.js"></script>
+        <script src="js/predictor.js"></script>
     </head>
     <body onload="init()" style="margin:0">
         <div class="navbar navbar-inverse" style="border-radius:0;">
-          <a class="navbar-brand" href="#" style="color:#eee">Drifter GPS Tracker</a>
+          <a class="navbar-brand" href="#" style="color:#eee">Drifter GPS Tracker/Predictor</a>
           
           
           <div class="pull-right">
@@ -55,14 +55,14 @@
             </div>
         </div>
         <div style="position:absolute;bottom:0;left:0;right:0;height:40px;background-color:white;padding:3px;text-align:left">
-            <label for="ramius_gps_topic">Ramius (Red): </label>
-            <input type="text" data-mini="true" data-clear-btn="true" name="ramius_gps_topic" id="ramius_gps_topic" value="/ramiusgpsbox/gps/fix" placeholder="/ramiusgpsbox/gps/fix" />
-            <label for="drifter_gps_topic">Drifter (Gold): </label>
-            <input type="text" data-mini="true" data-clear-btn="true" name="drifter_gps_topic" id="drifter_gps_topic" value="/ramiusgpsbox2/gps/fix" placeholder="/ramiusgpsbox2/gps/fix" />
-            <label for="laptop_gps_topic">Laptop (Magenta): </label>
-            <input type="text" data-mini="true" data-clear-btn="true" name="latop_gps_topic" id="laptop_gps_topic" value="/gps/fix" placeholder="/gps/fix" />
+            <label for="gps_topic">GPS Topic: </label>
+            <input type="text" data-mini="true" data-clear-btn="true" name="gps_topic" id="gps_topic" value="/gps/fix" placeholder="/gps/fix" />
+            <label for="sample_topic">GPS Prediction Samples: </label>
+            <input type="text" data-mini="true" data-clear-btn="true" name="sample_topic" id="sample_topic" value="/sample/fix" placeholder="/sample/fix" />
             <label for="path_length">Max Path Length: </label>
             <input type="text" data-mini="true" data-clear-btn="true" name="path_length" id="path_length" value="0" placeholder="(0 = unlimited)" />
+            <label for="sample_length">Max Samples: </label>
+            <input type="text" data-mini="true" data-clear-btn="true" name="sample_length" id="sample_length" value="0" placeholder="(0 = unlimited)" />
         </div>
     </body>
 </html>

@@ -9,11 +9,13 @@ function Tracker(c) {
 var ros = new ROSLIB.Ros();
 var addr = "localhost:9090";
 var connected = false;
-trackers = {
+
+var trackers = {
   ramius: new Tracker('red'),
   drifter: new Tracker('gold'),
   laptop: new Tracker('magenta')
 }
+
 var msgps = 0.5;
 
 
@@ -32,9 +34,10 @@ function plotGPS(tracker, msg) {
 
   console.log('recv gps ' + tracker.color + ' (' + lon.toString() + ',' + lat.toString() + ') @ ' + time.toString());
 
-  var maxNumMarkers = parseInt($('#path_length').val());
-  if (maxNumMarkers > 0) {
-    while (tracker.markers.length >= maxNumMarkers) {
+  var maxFeatures = parseInt($('#path_length').val());
+  
+  if (maxFeatures > 0) {
+    while (tracker.markers.length >= maxFeatures) {
       var removedFeature = tracker.markers.shift();
       removedFeature.layer.destroyFeatures([removedFeature]);
     }
@@ -43,7 +46,7 @@ function plotGPS(tracker, msg) {
   manualpt = new OpenLayers.Feature.Vector(
     backTransform(new OpenLayers.Geometry.Point(lon,lat))
   );
-  manualpt.style = OpenLayers.Util.applyDefaults({fillColor: tracker.color, strokeColor: "black"},
+  manualpt.style = OpenLayers.Util.applyDefaults({fillColor: tracker.color, fillOpacity: 0.75, strokeColor: "black"},
     OpenLayers.Feature.Vector.style["default"]
   ); 
   vectorLayer.addFeatures([manualpt]);
